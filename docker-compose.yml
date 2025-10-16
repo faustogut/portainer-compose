@@ -1,0 +1,17 @@
+networks:
+  traefik:
+    external: true
+
+services:
+  pre-gitlab-ci-hello-docker:
+    image: git.epc-app.com:5050/fgutierrez/gitlab-ci-hello-docker:latest
+    restart: always
+    expose:
+      - 80
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${ROUTER_NAME}.rule=Host(`${DOMAIN_NAME}`)"
+      - "traefik.http.routers.${ROUTER_NAME}.entrypoints=websecure"
+      - "traefik.http.routers.${ROUTER_NAME}.tls.certresolver=myresolver"
+    networks:
+      - traefik
